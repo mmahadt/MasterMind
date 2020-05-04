@@ -1,17 +1,17 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
-import * as serviceWorker from './serviceWorker';
-
+import React from "react";
+import ReactDOM from "react-dom";
+import Mastermind from "../src/mastermind.js";
 ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
-  document.getElementById('root')
+  React.createElement(Mastermind, {
+    codeLength: 4,
+    colors: new Map([
+      [0, "zero"],
+      [1, "one"],
+      [2, "two"],
+      [3, "three"],
+      [4, "four"],
+      [5, "five"],
+    ]),
+  }),
+  document.getElementById("mastermind")
 );
-
-// If you want your app to work offline and load faster, you can change
-// unregister() to register() below. Note this comes with some pitfalls.
-// Learn more about service workers: https://bit.ly/CRA-PWA
-serviceWorker.unregister();
