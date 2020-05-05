@@ -1,298 +1,307 @@
 import React from "react";
-import classNames from "classnames";
+
+import CodePegs from "./components/CodePegs";
+import DecodingBoard from "./components/DecodingBoard";
+import EndGame from "./components/EndGame";
+import Rules from "./components/Rules";
+
 //You need this npm package to do createReactClass
 var createReactClass = require("create-react-class");
-let times = (n) => {
-  return (f) => {
-    Array(n)
-      .fill()
-      .map((_, i) => f(i));
-  };
-};
 
-const Rules = createReactClass({
-  render: function () {
-    const className = classNames({
-      info: true,
-      hidden: !this.props.rules,
-    });
-    const infoText = !this.props.rules ? "Show rules" : "Hide rules";
+// let times = (n) => {
+//   return (f) => {
+//     Array(n)
+//       .fill()
+//       .map((_, i) => f(i));
+//   };
+// };
 
-    return (
-      <div className="rules">
-        <span className="rules-toggle" onClick={this.props.toggleRules}>
-          {infoText}
-        </span>
-        <p className={className}>
-          Try to guess the pattern, in both order and color, within ten turns.
-          After submitting a row, a small black peg is placed for each code peg
-          from the guess which is correct in both color and position. A white
-          peg indicates the existence of a correct color code peg placed in the
-          wrong position. More info on{" "}
-          <a
-            href="https://en.wikipedia.org/wiki/Mastermind_(board_game)"
-            target="_blank"
-          >
-            Wikipedia
-          </a>
-          .
-        </p>
-      </div>
-    );
-  },
-});
+// const Rules = createReactClass({
+//   render: function () {
+//     const className = classNames({
+//       info: true,
+//       hidden: !this.props.rules,
+//     });
+//     const infoText = !this.props.rules ? "Show rules" : "Hide rules";
 
-const Peg = createReactClass({
-  render: function () {
-    return (
-      <span className={this.props.pegClass}>
-        <input
-          type="radio"
-          name={this.props.name}
-          value={this.props.value}
-          id={this.props.idVal}
-          onClick={this.props.isCurrentRow ? this.props.activatePeg : null}
-        />
-        <label htmlFor={this.props.idVal}></label>
-      </span>
-    );
-  },
-});
+//     return (
+//       <div className="rules">
+//         <span className="rules-toggle" onClick={this.props.toggleRules}>
+//           {infoText}
+//         </span>
+//         <p className={className}>
+//           Try to guess the pattern, in both order and color, within ten turns.
+//           After submitting a row, a small black peg is placed for each code peg
+//           from the guess which is correct in both color and position. A white
+//           peg indicates the existence of a correct color code peg placed in the
+//           wrong position. More info on{" "}
+//           <a
+//             href="https://en.wikipedia.org/wiki/Mastermind_(board_game)"
+//             target="_blank"
+//           >
+//             Wikipedia
+//           </a>
+//           .
+//         </p>
+//       </div>
+//     );
+//   },
+// });
 
-const DecodeRow = createReactClass({
-  //do not update already submitted row
-  shouldComponentUpdate: function (nextProps) {
-    return nextProps.state.currentRow <= nextProps.rowId;
-  },
+// const Peg = createReactClass({
+//   render: function () {
+//     return (
+//       <span className={this.props.pegClass}>
+//         <input
+//           type="radio"
+//           name={this.props.name}
+//           value={this.props.value}
+//           id={this.props.idVal}
+//           onClick={this.props.isCurrentRow ? this.props.activatePeg : null}
+//         />
+//         <label htmlFor={this.props.idVal}></label>
+//       </span>
+//     );
+//   },
+// });
 
-  render: function () {
-    let pegs = [];
-    let idVal;
-    let pegClass;
+// const DecodeRow = createReactClass({
+//   //do not update already submitted row
+//   shouldComponentUpdate: function (nextProps) {
+//     return nextProps.state.currentRow <= nextProps.rowId;
+//   },
 
-    let generatePeg = (i) => {
-      idVal = this.props.name + "-" + i + 1;
-      //update current row
-      if (this.props.state.currentRow === this.props.rowId) {
-        pegClass = this.props.state.currentGuess.get(i)
-          ? "peg " + this.props.state.currentGuess.get(i)
-          : "peg";
-      } else {
-        //clear all of the next pegs - from the previous game
-        pegClass = "peg";
-      }
+//   render: function () {
+//     let pegs = [];
+//     let idVal;
+//     let pegClass;
 
-      pegs.push(
-        <Peg
-          idVal={idVal}
-          name={this.props.name}
-          value={i + 1}
-          key={idVal}
-          pegClass={pegClass}
-          isCurrentRow={this.props.isCurrentRow}
-          activatePeg={this.props.activatePeg}
-        />
-      );
-    };
+//     let generatePeg = (i) => {
+//       idVal = this.props.name + "-" + i + 1;
+//       //update current row
+//       if (this.props.state.currentRow === this.props.rowId) {
+//         pegClass = this.props.state.currentGuess.get(i)
+//           ? "peg " + this.props.state.currentGuess.get(i)
+//           : "peg";
+//       } else {
+//         //clear all of the next pegs - from the previous game
+//         pegClass = "peg";
+//       }
 
-    times(this.props.state.pegsInRow)(generatePeg);
+//       pegs.push(
+//         <Peg
+//           idVal={idVal}
+//           name={this.props.name}
+//           value={i + 1}
+//           key={idVal}
+//           pegClass={pegClass}
+//           isCurrentRow={this.props.isCurrentRow}
+//           activatePeg={this.props.activatePeg}
+//         />
+//       );
+//     };
 
-    return <div className="decode-row">{pegs}</div>;
-  },
-});
+//     times(this.props.state.pegsInRow)(generatePeg);
 
-const SubmitButton = createReactClass({
-  render: function () {
-    const className = classNames({
-      submit: true,
-      hidden: !(
-        this.props.state.currentGuess.size >= this.props.state.pegsInRow &&
-        this.props.state.currentRow === this.props.rowId
-      ),
-    });
+//     return <div className="decode-row">{pegs}</div>;
+//   },
+// });
 
-    return (
-      <button className={className} onClick={this.props.submitPegs}></button>
-    );
-  },
-});
+// const SubmitButton = createReactClass({
+//   render: function () {
+//     const className = classNames({
+//       submit: true,
+//       hidden: !(
+//         this.props.state.currentGuess.size >= this.props.state.pegsInRow &&
+//         this.props.state.currentRow === this.props.rowId
+//       ),
+//     });
 
-const Row = createReactClass({
-  render: function () {
-    const isCurrentRow = this.props.state.currentRow === this.props.rowId;
-    const rowClassName = classNames({
-      row: true,
-      clearfix: true,
-      current: isCurrentRow,
-    });
-    const hintsRowName = "hintsRow-" + this.props.rowId;
-    const rowName = "decodeRow-" + this.props.rowId;
+//     return (
+//       <button className={className} onClick={this.props.submitPegs}></button>
+//     );
+//   },
+// });
 
-    return (
-      <div className={rowClassName}>
-        <div className="left">
-          <DecodeRow
-            name={rowName}
-            key={this.props.rowId}
-            rowId={this.props.rowId}
-            state={this.props.state}
-            isCurrentRow={isCurrentRow}
-            activatePeg={this.props.activatePeg}
-          />
-        </div>
-        <div className="left">
-          <SubmitButton
-            rowId={this.props.rowId}
-            state={this.props.state}
-            submitPegs={this.props.submitPegs}
-          />
-        </div>
-        <div className="right">
-          <HintsRow
-            name={hintsRowName}
-            key={this.props.rowId}
-            rowId={this.props.rowId}
-            state={this.props.state}
-          />
-        </div>
-      </div>
-    );
-  },
-});
+// const Row = createReactClass({
+//   render: function () {
+//     const isCurrentRow = this.props.state.currentRow === this.props.rowId;
+//     const rowClassName = classNames({
+//       row: true,
+//       clearfix: true,
+//       current: isCurrentRow,
+//     });
+//     const hintsRowName = "hintsRow-" + this.props.rowId;
+//     const rowName = "decodeRow-" + this.props.rowId;
 
-const Hint = createReactClass({
-  shouldComponentUpdate: function (nextProps) {
-    return nextProps.state.currentRow - 1 <= nextProps.rowId;
-  },
+//     return (
+//       <div className={rowClassName}>
+//         <div className="left">
+//           <DecodeRow
+//             name={rowName}
+//             key={this.props.rowId}
+//             rowId={this.props.rowId}
+//             state={this.props.state}
+//             isCurrentRow={isCurrentRow}
+//             activatePeg={this.props.activatePeg}
+//             times={this.times}
+//           />
+//         </div>
+//         <div className="left">
+//           <SubmitButton
+//             rowId={this.props.rowId}
+//             state={this.props.state}
+//             submitPegs={this.props.submitPegs}
+//           />
+//         </div>
+//         <div className="right">
+//           <HintsRow
+//             name={hintsRowName}
+//             times={this.times}
+//             key={this.props.rowId}
+//             rowId={this.props.rowId}
+//             state={this.props.state}
+//           />
+//         </div>
+//       </div>
+//     );
+//   },
+// });
 
-  render: function () {
-    return <span className={this.props.hintClass}></span>;
-  },
-});
+// const Hint = createReactClass({
+//   shouldComponentUpdate: function (nextProps) {
+//     return nextProps.state.currentRow - 1 <= nextProps.rowId;
+//   },
 
-const HintsRow = createReactClass({
-  render: function () {
-    const hints = [];
+//   render: function () {
+//     return <span className={this.props.hintClass}></span>;
+//   },
+// });
 
-    let idVal;
-    let hintClass = "";
-    let exactMatches = this.props.state.exactMatches;
-    let valueMatches = this.props.state.valueMatches;
+// const HintsRow = createReactClass({
+//   render: function () {
+//     const hints = [];
 
-    let generateHint = (i) => {
-      hintClass = "hint";
-      idVal = this.props.name + "-" + i + 1;
+//     let idVal;
+//     let hintClass = "";
+//     let exactMatches = this.props.state.exactMatches;
+//     let valueMatches = this.props.state.valueMatches;
 
-      //update current row
-      if (this.props.state.currentRow - 1 === this.props.rowId) {
-        if (exactMatches > 0) {
-          hintClass = hintClass + " exact-matches";
-          exactMatches--;
-        } else if (valueMatches > 0) {
-          hintClass = hintClass + " value-matches";
-          valueMatches--;
-        } else {
-          hintClass = hintClass + " none-matches";
-        }
-      }
+//     let generateHint = (i) => {
+//       hintClass = "hint";
+//       idVal = this.props.name + "-" + i + 1;
 
-      hints.push(
-        <Hint
-          key={idVal}
-          hintClass={hintClass}
-          rowId={this.props.rowId}
-          state={this.props.state}
-        />
-      );
-    };
+//       //update current row
+//       if (this.props.state.currentRow - 1 === this.props.rowId) {
+//         if (exactMatches > 0) {
+//           hintClass = hintClass + " exact-matches";
+//           exactMatches--;
+//         } else if (valueMatches > 0) {
+//           hintClass = hintClass + " value-matches";
+//           valueMatches--;
+//         } else {
+//           hintClass = hintClass + " none-matches";
+//         }
+//       }
 
-    times(this.props.state.pegsInRow)(generateHint);
+//       hints.push(
+//         <Hint
+//           key={idVal}
+//           hintClass={hintClass}
+//           rowId={this.props.rowId}
+//           state={this.props.state}
+//         />
+//       );
+//     };
 
-    return <div className="hints-row">{hints}</div>;
-  },
-});
+//     times(this.props.state.pegsInRow)(generateHint);
 
-const DecodingBoard = createReactClass({
-  render: function () {
-    let rows = [];
-    let rowName;
+//     return <div className="hints-row">{hints}</div>;
+//   },
+// });
 
-    let generateRow = (i) => {
-      rowName = "decodeRow-" + i + 1;
-      rows.push(
-        <Row
-          name={rowName}
-          key={i + 1}
-          rowId={i}
-          state={this.props.state}
-          activatePeg={this.props.activatePeg}
-          submitPegs={this.props.submitPegs}
-        />
-      );
-    };
+// const DecodingBoard = createReactClass({
+//   render: function () {
+//     let rows = [];
+//     let rowName;
 
-    times(this.props.state.attempts)(generateRow);
+//     let generateRow = (i) => {
+//       rowName = "decodeRow-" + i + 1;
+//       rows.push(
+//         <Row
+//           times={this.times}
+//           name={rowName}
+//           key={i + 1}
+//           rowId={i}
+//           state={this.props.state}
+//           activatePeg={this.props.activatePeg}
+//           submitPegs={this.props.submitPegs}
+//         />
+//       );
+//     };
 
-    return <div className="decoding-board left">{rows}</div>;
-  },
-});
+//     times(this.props.state.attempts)(generateRow);
 
-const CodePegs = createReactClass({
-  render: function () {
-    const pegs = [];
+//     return <div className="decoding-board left">{rows}</div>;
+//   },
+// });
 
-    let idVal;
-    let pegClass;
+// const CodePegs = createReactClass({
+//   render: function () {
+//     const pegs = [];
 
-    for (let [key, value] of this.props.colors) {
-      idVal = "peg-" + key;
-      pegClass = "peg " + value;
-      if (value === this.props.selectedPeg) {
-        pegClass = pegClass + " selected";
-      }
-      pegs.push(
-        <Peg
-          idVal={idVal}
-          name="peg"
-          value={value}
-          key={idVal}
-          pegClass={pegClass}
-          isCurrentRow={true}
-          activatePeg={this.props.activatePeg}
-        />
-      );
-    }
+//     let idVal;
+//     let pegClass;
 
-    return <div className="codepegs right">{pegs}</div>;
-  },
-});
+//     for (let [key, value] of this.props.colors) {
+//       idVal = "peg-" + key;
+//       pegClass = "peg " + value;
+//       if (value === this.props.selectedPeg) {
+//         pegClass = pegClass + " selected";
+//       }
+//       pegs.push(
+//         <Peg
+//           idVal={idVal}
+//           name="peg"
+//           value={value}
+//           key={idVal}
+//           pegClass={pegClass}
+//           isCurrentRow={true}
+//           activatePeg={this.props.activatePeg}
+//         />
+//       );
+//     }
 
-const EndGame = createReactClass({
-  render: function () {
-    const endGameInfoClass = classNames({
-      endgame: true,
-      hidden: !this.props.endGame,
-    });
-    const endGameStatusClass = classNames({
-      "endgame-relative": true,
-      success: this.props.success,
-      failure: !this.props.success,
-    });
-    const infoText = this.props.success ? "Congratulations!" : "GAME OVER!";
+//     return <div className="codepegs right">{pegs}</div>;
+//   },
+// });
 
-    return (
-      <div className={endGameInfoClass}>
-        <div className={endGameStatusClass}>
-          <h2 className="endgame-header">{infoText}</h2>
-          <button className="endgame-btn" onClick={this.props.reloadGame}>
-            PLAY AGAIN
-          </button>
-        </div>
-        <div className="endgame-relative endgame-overlay"></div>
-      </div>
-    );
-  },
-});
+// const EndGame = createReactClass({
+//   render: function () {
+//     const endGameInfoClass = classNames({
+//       endgame: true,
+//       hidden: !this.props.endGame,
+//     });
+//     const endGameStatusClass = classNames({
+//       "endgame-relative": true,
+//       success: this.props.success,
+//       failure: !this.props.success,
+//     });
+//     const infoText = this.props.success ? "Congratulations!" : "GAME OVER!";
+
+//     return (
+//       <div className={endGameInfoClass}>
+//         <div className={endGameStatusClass}>
+//           <h2 className="endgame-header">{infoText}</h2>
+//           <button className="endgame-btn" onClick={this.props.reloadGame}>
+//             PLAY AGAIN
+//           </button>
+//         </div>
+//         <div className="endgame-relative endgame-overlay"></div>
+//       </div>
+//     );
+//   },
+// });
 
 const Mastermind = createReactClass({
   getInitialState: function () {
@@ -322,6 +331,14 @@ const Mastermind = createReactClass({
     this.setState({ valueMatches: 0 });
   },
 
+  times: (n) => {
+    return (f) => {
+      Array(n)
+        .fill()
+        .map((_, i) => f(i));
+    };
+  },
+
   toggleRules: function () {
     this.setState({ rules: !this.state.rules });
   },
@@ -337,7 +354,7 @@ const Mastermind = createReactClass({
       code.set(i, this.props.colors.get(this.getRandomArbitrary()));
     };
 
-    times(this.props.codeLength)(generateCode);
+    this.times(this.props.codeLength)(generateCode);
 
     return code;
   },
@@ -430,6 +447,7 @@ const Mastermind = createReactClass({
             state={this.state}
             activatePeg={this.activatePeg}
             submitPegs={this.submitPegs}
+            times={this.times}
           />
           <CodePegs
             selectedPeg={this.state.selectedPeg}
