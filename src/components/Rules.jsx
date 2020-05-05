@@ -2,15 +2,16 @@ import React from "react";
 import classNames from "classnames";
 
 function Rules(props) {
+  const { rules, toggleRules } = props;
   const className = classNames({
     info: true,
-    hidden: !props.rules,
+    hidden: !rules,
   });
-  const infoText = !props.rules ? "Show rules" : "Hide rules";
+  const infoText = !rules ? "Show rules" : "Hide rules";
 
   return (
     <div className="rules">
-      <span className="rules-toggle" onClick={props.toggleRules}>
+      <span className="rules-toggle" onClick={toggleRules}>
         {infoText}
       </span>
       <p className={className}>

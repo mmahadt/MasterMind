@@ -4,22 +4,23 @@ import classNames from "classnames";
 const createReactClass = require("create-react-class");
 
 function EndGame(props) {
+  const { endGame, success, reloadGame } = props;
   const endGameInfoClass = classNames({
     endgame: true,
-    hidden: !props.endGame,
+    hidden: !endGame,
   });
   const endGameStatusClass = classNames({
     "endgame-relative": true,
-    success: props.success,
-    failure: !props.success,
+    success: success,
+    failure: !success,
   });
-  const infoText = props.success ? "Congratulations!" : "GAME OVER!";
+  const infoText = success ? "Congratulations!" : "GAME OVER!";
 
   return (
     <div className={endGameInfoClass}>
       <div className={endGameStatusClass}>
         <h2 className="endgame-header">{infoText}</h2>
-        <button className="endgame-btn" onClick={props.reloadGame}>
+        <button className="endgame-btn" onClick={reloadGame}>
           PLAY AGAIN
         </button>
       </div>

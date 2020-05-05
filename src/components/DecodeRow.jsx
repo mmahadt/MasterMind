@@ -11,16 +11,17 @@ const DecodeRow = createReactClass({
   },
 
   render: function () {
+    const { name, state, rowId, isCurrentRow, activatePeg, times } = this.props;
     let pegs = [];
     let idVal;
     let pegClass;
 
     let generatePeg = (i) => {
-      idVal = this.props.name + "-" + i + 1;
+      idVal = name + "-" + i + 1;
       //update current row
-      if (this.props.state.currentRow === this.props.rowId) {
-        pegClass = this.props.state.currentGuess.get(i)
-          ? "peg " + this.props.state.currentGuess.get(i)
+      if (state.currentRow === rowId) {
+        pegClass = state.currentGuess.get(i)
+          ? "peg " + state.currentGuess.get(i)
           : "peg";
       } else {
         //clear all of the next pegs - from the previous game
@@ -30,17 +31,17 @@ const DecodeRow = createReactClass({
       pegs.push(
         <Peg
           idVal={idVal}
-          name={this.props.name}
+          name={name}
           value={i + 1}
           key={idVal}
           pegClass={pegClass}
-          isCurrentRow={this.props.isCurrentRow}
-          activatePeg={this.props.activatePeg}
+          isCurrentRow={isCurrentRow}
+          activatePeg={activatePeg}
         />
       );
     };
 
-    this.props.times(this.props.state.pegsInRow)(generatePeg);
+    times(state.pegsInRow)(generatePeg);
 
     return <div className="decode-row">{pegs}</div>;
   },

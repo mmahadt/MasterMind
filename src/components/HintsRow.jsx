@@ -4,19 +4,20 @@ import Hint from "./Hint";
 const createReactClass = require("create-react-class");
 
 function HintsRow(props) {
+  const { state, name, rowId, times } = props;
   const hints = [];
 
   let idVal;
   let hintClass = "";
-  let exactMatches = props.state.exactMatches;
-  let valueMatches = props.state.valueMatches;
+  let exactMatches = state.exactMatches;
+  let valueMatches = state.valueMatches;
 
   let generateHint = (i) => {
     hintClass = "hint";
-    idVal = props.name + "-" + i + 1;
+    idVal = name + "-" + i + 1;
 
     //update current row
-    if (props.state.currentRow - 1 === props.rowId) {
+    if (state.currentRow - 1 === rowId) {
       if (exactMatches > 0) {
         hintClass = hintClass + " exact-matches";
         exactMatches--;
@@ -29,16 +30,11 @@ function HintsRow(props) {
     }
 
     hints.push(
-      <Hint
-        key={idVal}
-        hintClass={hintClass}
-        rowId={props.rowId}
-        state={props.state}
-      />
+      <Hint key={idVal} hintClass={hintClass} rowId={rowId} state={state} />
     );
   };
 
-  props.times(props.state.pegsInRow)(generateHint);
+  times(state.pegsInRow)(generateHint);
 
   return <div className="hints-row">{hints}</div>;
 }

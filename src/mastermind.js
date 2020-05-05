@@ -8,8 +8,34 @@ import Rules from "./components/Rules";
 //You need this npm package to do createReactClass
 const createReactClass = require("create-react-class");
 
-const Mastermind = createReactClass({
-  getInitialState: function () {
+class Mastermind extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      code: this.getCode(), //the main code to be decoded
+      selectedPeg: this.props.colors.get(0),
+      currentRow: 0,
+      currentGuess: new Map(),
+      exactMatches: 0,
+      valueMatches: 0,
+      pegsInRow: 4,
+      attempts: 10,
+      rules: false,
+      success: false,
+      endGame: false,
+    };
+    this.getInitialState = this.getInitialState.bind(this);
+    this.reloadGame = this.reloadGame.bind(this);
+    this.toggleRules = this.toggleRules.bind(this);
+    this.getRandomArbitrary = this.getRandomArbitrary.bind(this);
+    this.getCode = this.getCode.bind(this);
+    this.activatePeg = this.activatePeg.bind(this);
+    this.keyOf = this.keyOf.bind(this);
+    this.submitPegs = this.submitPegs.bind(this);
+    this.times = this.times.bind(this);
+  }
+
+  getInitialState() {
     return {
       code: this.getCode(), //the main code to be decoded
       selectedPeg: this.props.colors.get(0),
@@ -23,9 +49,9 @@ const Mastermind = createReactClass({
       success: false,
       endGame: false,
     };
-  },
+  }
 
-  reloadGame: function () {
+  reloadGame() {
     this.setState({ success: false });
     this.setState({ endGame: false });
     this.setState({ code: this.getCode() });
@@ -34,25 +60,23 @@ const Mastermind = createReactClass({
     this.setState({ currentGuess: new Map() });
     this.setState({ exactMatches: 0 });
     this.setState({ valueMatches: 0 });
-  },
+  }
 
-  times: (n) => {
-    return (f) => {
-      Array(n)
-        .fill()
-        .map((_, i) => f(i));
-    };
-  },
+  times = (n) => (f) => {
+    Array(n)
+      .fill()
+      .map((_, i) => f(i));
+  };
 
-  toggleRules: function () {
+  toggleRules() {
     this.setState({ rules: !this.state.rules });
-  },
+  }
 
-  getRandomArbitrary: function (min = 0, max = 5) {
+  getRandomArbitrary(min = 0, max = 5) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
-  },
+  }
 
-  getCode: function () {
+  getCode() {
     const code = new Map();
 
     let generateCode = (i) => {
@@ -62,9 +86,9 @@ const Mastermind = createReactClass({
     this.times(this.props.codeLength)(generateCode);
 
     return code;
-  },
+  }
 
-  activatePeg: function (event) {
+  activatePeg(event) {
     //if one of the peg on the right was selected
     if (event.target.name.startsWith("peg")) {
       this.setState({ selectedPeg: event.target.value });
@@ -80,9 +104,9 @@ const Mastermind = createReactClass({
         });
       }
     }
-  },
+  }
 
-  keyOf: function (map, valueToFind) {
+  keyOf(map, valueToFind) {
     for (let [key, value] of map) {
       if (valueToFind === value) {
         return key;
@@ -90,9 +114,9 @@ const Mastermind = createReactClass({
     }
 
     return -1;
-  },
+  }
 
-  submitPegs: function () {
+  submitPegs() {
     let code = new Map(this.state.code);
     let pegs = this.state.currentGuess;
     let foundKey;
@@ -131,9 +155,9 @@ const Mastermind = createReactClass({
     this.setState({ valueMatches: valueMatches });
     this.setState({ currentRow: this.state.currentRow + 1 });
     this.setState({ currentGuess: new Map() });
-  },
+  }
 
-  render: function () {
+  render() {
     return (
       <div>
         <h1>
@@ -169,7 +193,7 @@ const Mastermind = createReactClass({
         <div className="cheat">{this.state.code}</div>
       </div>
     );
-  },
-});
+  }
+}
 
 export default Mastermind;

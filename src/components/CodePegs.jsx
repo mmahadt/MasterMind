@@ -2,15 +2,16 @@ import React from "react";
 import Peg from "./Peg";
 
 function CodePegs(props) {
+  const { colors, selectedPeg, activatePeg } = props;
   const pegs = [];
 
   let idVal;
   let pegClass;
 
-  for (let [key, value] of props.colors) {
+  for (let [key, value] of colors) {
     idVal = "peg-" + key;
     pegClass = "peg " + value;
-    if (value === props.selectedPeg) {
+    if (value === selectedPeg) {
       pegClass = pegClass + " selected";
     }
     pegs.push(
@@ -21,7 +22,7 @@ function CodePegs(props) {
         key={idVal}
         pegClass={pegClass}
         isCurrentRow={true}
-        activatePeg={props.activatePeg}
+        activatePeg={activatePeg}
       />
     );
   }

@@ -5,42 +5,39 @@ import HintsRow from "./HintsRow";
 import SubmitButton from "./SubmitButton";
 
 function Row(props) {
-  const isCurrentRow = props.state.currentRow === props.rowId;
+  const { state, rowId, activatePeg, times, submitPegs } = props;
+  const isCurrentRow = state.currentRow === rowId;
   const rowClassName = classNames({
     row: true,
     clearfix: true,
     current: isCurrentRow,
   });
-  const hintsRowName = "hintsRow-" + props.rowId;
-  const rowName = "decodeRow-" + props.rowId;
+  const hintsRowName = "hintsRow-" + rowId;
+  const rowName = "decodeRow-" + rowId;
 
   return (
     <div className={rowClassName}>
       <div className="left">
         <DecodeRow
           name={rowName}
-          key={props.rowId}
-          rowId={props.rowId}
-          state={props.state}
+          key={rowId}
+          rowId={rowId}
+          state={state}
           isCurrentRow={isCurrentRow}
-          activatePeg={props.activatePeg}
-          times={props.times}
+          activatePeg={activatePeg}
+          times={times}
         />
       </div>
       <div className="left">
-        <SubmitButton
-          rowId={props.rowId}
-          state={props.state}
-          submitPegs={props.submitPegs}
-        />
+        <SubmitButton rowId={rowId} state={state} submitPegs={submitPegs} />
       </div>
       <div className="right">
         <HintsRow
           name={hintsRowName}
-          key={props.rowId}
-          rowId={props.rowId}
-          state={props.state}
-          times={props.times}
+          key={rowId}
+          rowId={rowId}
+          state={state}
+          times={times}
         />
       </div>
     </div>

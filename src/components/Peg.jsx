@@ -1,16 +1,17 @@
 import React from "react";
 
 function Peg(props) {
+  const { pegClass, name, value, idVal, isCurrentRow, activatePeg } = props;
   return (
-    <span className={props.pegClass}>
+    <span className={pegClass}>
       <input
         type="radio"
-        name={props.name}
-        value={props.value}
-        id={props.idVal}
-        onClick={props.isCurrentRow ? props.activatePeg : null}
+        name={name}
+        value={value}
+        id={idVal}
+        onClick={isCurrentRow ? activatePeg : null}
       />
-      <label htmlFor={props.idVal}></label>
+      <label htmlFor={idVal}></label>
     </span>
   );
 }
