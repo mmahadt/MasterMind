@@ -1,16 +1,17 @@
 import React from "react";
 import Peg from "./Peg";
 
-//You need this npm package to do createReactClass
-const createReactClass = require("create-react-class");
+class DecodeRow extends React.Component {
+  constructor(props) {
+    super(props);
+  }
 
-const DecodeRow = createReactClass({
   //do not update already submitted row
-  shouldComponentUpdate: function (nextProps) {
+  shouldComponentUpdate(nextProps) {
     return nextProps.state.currentRow <= nextProps.rowId;
-  },
+  }
 
-  render: function () {
+  render() {
     const { name, state, rowId, isCurrentRow, activatePeg, times } = this.props;
     let pegs = [];
     let idVal;
@@ -44,7 +45,7 @@ const DecodeRow = createReactClass({
     times(state.pegsInRow)(generatePeg);
 
     return <div className="decode-row">{pegs}</div>;
-  },
-});
+  }
+}
 
 export default DecodeRow;

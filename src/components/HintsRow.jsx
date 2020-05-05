@@ -1,7 +1,5 @@
 import React from "react";
 import Hint from "./Hint";
-//You need this npm package to do createReactClass
-const createReactClass = require("create-react-class");
 
 function HintsRow(props) {
   const { state, name, rowId, times } = props;

@@ -5,9 +5,6 @@ import DecodingBoard from "./components/DecodingBoard";
 import EndGame from "./components/EndGame";
 import Rules from "./components/Rules";
 
-//You need this npm package to do createReactClass
-const createReactClass = require("create-react-class");
-
 class Mastermind extends React.Component {
   constructor(props) {
     super(props);
@@ -24,7 +21,6 @@ class Mastermind extends React.Component {
       success: false,
       endGame: false,
     };
-    this.getInitialState = this.getInitialState.bind(this);
     this.reloadGame = this.reloadGame.bind(this);
     this.toggleRules = this.toggleRules.bind(this);
     this.getRandomArbitrary = this.getRandomArbitrary.bind(this);
@@ -33,22 +29,6 @@ class Mastermind extends React.Component {
     this.keyOf = this.keyOf.bind(this);
     this.submitPegs = this.submitPegs.bind(this);
     this.times = this.times.bind(this);
-  }
-
-  getInitialState() {
-    return {
-      code: this.getCode(), //the main code to be decoded
-      selectedPeg: this.props.colors.get(0),
-      currentRow: 0,
-      currentGuess: new Map(),
-      exactMatches: 0,
-      valueMatches: 0,
-      pegsInRow: 4,
-      attempts: 10,
-      rules: false,
-      success: false,
-      endGame: false,
-    };
   }
 
   reloadGame() {
