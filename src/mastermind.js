@@ -32,14 +32,16 @@ class Mastermind extends React.Component {
   }
 
   reloadGame() {
-    this.setState({ success: false });
-    this.setState({ endGame: false });
-    this.setState({ code: this.getCode() });
-    this.setState({ selectedPeg: this.props.colors.get(0) });
-    this.setState({ currentRow: 0 });
-    this.setState({ currentGuess: new Map() });
-    this.setState({ exactMatches: 0 });
-    this.setState({ valueMatches: 0 });
+    this.setState({
+      success: false,
+      endGame: false,
+      code: this.getCode(),
+      selectedPeg: this.props.colors.get(0),
+      currentRow: 0,
+      currentGuess: new Map(),
+      exactMatches: 0,
+      valueMatches: 0,
+    });
   }
 
   times = (n) => (f) => {
@@ -131,10 +133,12 @@ class Mastermind extends React.Component {
       this.setState({ endGame: true });
     }
 
-    this.setState({ exactMatches: exactMatches });
-    this.setState({ valueMatches: valueMatches });
-    this.setState({ currentRow: this.state.currentRow + 1 });
-    this.setState({ currentGuess: new Map() });
+    this.setState({
+      exactMatches: exactMatches,
+      valueMatches: valueMatches,
+      currentRow: this.state.currentRow + 1,
+      currentGuess: new Map(),
+    });
   }
 
   render() {
