@@ -2,7 +2,7 @@ import React from "react";
 import Peg from "./Peg";
 
 //You need this npm package to do createReactClass
-var createReactClass = require("create-react-class");
+const createReactClass = require("create-react-class");
 
 const DecodeRow = createReactClass({
   //do not update already submitted row

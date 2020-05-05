@@ -1,7 +1,5 @@
 import React from "react";
 import classNames from "classnames";
-//You need this npm package to do createReactClass
-var createReactClass = require("create-react-class");
 
 function Rules(props) {
   const className = classNames({

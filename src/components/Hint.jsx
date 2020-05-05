@@ -1,7 +1,7 @@
 import React from "react";
 
 //You need this npm package to do createReactClass
-var createReactClass = require("create-react-class");
+const createReactClass = require("create-react-class");
 
 const Hint = createReactClass({
   shouldComponentUpdate: function (nextProps) {

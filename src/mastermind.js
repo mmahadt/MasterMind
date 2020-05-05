@@ -6,7 +6,7 @@ import EndGame from "./components/EndGame";
 import Rules from "./components/Rules";
 
 //You need this npm package to do createReactClass
-var createReactClass = require("create-react-class");
+const createReactClass = require("create-react-class");
 
 const Mastermind = createReactClass({
   getInitialState: function () {

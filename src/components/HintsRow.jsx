@@ -1,48 +1,46 @@
 import React from "react";
 import Hint from "./Hint";
 //You need this npm package to do createReactClass
-var createReactClass = require("create-react-class");
+const createReactClass = require("create-react-class");
 
-const HintsRow = createReactClass({
-  render: function () {
-    const hints = [];
+function HintsRow(props) {
+  const hints = [];
 
-    let idVal;
-    let hintClass = "";
-    let exactMatches = this.props.state.exactMatches;
-    let valueMatches = this.props.state.valueMatches;
+  let idVal;
+  let hintClass = "";
+  let exactMatches = props.state.exactMatches;
+  let valueMatches = props.state.valueMatches;
 
-    let generateHint = (i) => {
-      hintClass = "hint";
-      idVal = this.props.name + "-" + i + 1;
+  let generateHint = (i) => {
+    hintClass = "hint";
+    idVal = props.name + "-" + i + 1;
 
-      //update current row
-      if (this.props.state.currentRow - 1 === this.props.rowId) {
-        if (exactMatches > 0) {
-          hintClass = hintClass + " exact-matches";
-          exactMatches--;
-        } else if (valueMatches > 0) {
-          hintClass = hintClass + " value-matches";
-          valueMatches--;
-        } else {
-          hintClass = hintClass + " none-matches";
-        }
+    //update current row
+    if (props.state.currentRow - 1 === props.rowId) {
+      if (exactMatches > 0) {
+        hintClass = hintClass + " exact-matches";
+        exactMatches--;
+      } else if (valueMatches > 0) {
+        hintClass = hintClass + " value-matches";
+        valueMatches--;
+      } else {
+        hintClass = hintClass + " none-matches";
       }
+    }
 
-      hints.push(
-        <Hint
-          key={idVal}
-          hintClass={hintClass}
-          rowId={this.props.rowId}
-          state={this.props.state}
-        />
-      );
-    };
+    hints.push(
+      <Hint
+        key={idVal}
+        hintClass={hintClass}
+        rowId={props.rowId}
+        state={props.state}
+      />
+    );
+  };
 
-    this.props.times(this.props.state.pegsInRow)(generateHint);
+  props.times(props.state.pegsInRow)(generateHint);
 
-    return <div className="hints-row">{hints}</div>;
-  },
-});
+  return <div className="hints-row">{hints}</div>;
+}
 
 export default HintsRow;
